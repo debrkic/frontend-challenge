@@ -10,15 +10,6 @@ class RaceWinners extends Component {
         champion: {}
     }
 
-    findMinTime = (array) => {
-        let min = array[0].timeMillis;
-        array.forEach((item) => {
-            min = item.timeMillis < min ? item.timeMillis : min;
-        });
-
-        return min;
-    }
-
     componentDidMount() {
         let raceWinners = [];
 
