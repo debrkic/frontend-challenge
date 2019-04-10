@@ -24,7 +24,7 @@ class List extends Component {
             ...state,
             champions,
             loading: false
-        }), () => console.log('done loading') ); 
+        })); 
     }
 
     componentDidMount() {
@@ -35,16 +35,17 @@ class List extends Component {
         () => {
             this.getChampions();
         });
-        
-        //axios.get('http://ergast.com/api/f1/2005/driverStandings.json?limit=1').then(data => console.log(data));
-        //axios.get('http://ergast.com/api/f1/2005/results/1.json').then(data => console.log(data));
+    }
+
+    goToRaceWinners = (year) => {
+        window.location.assign(`/race-winners/${year}`); 
     }
 
     render() {
         let jsx = this.state.loading ? 
             (<tr><td colSpan={3}>Loading. Please wait...</td></tr>) : 
             this.state.champions.map((champion, index) => (
-                <tr key={index} className="table-row">
+                <tr key={index} className="table-row" onClick={() => this.goToRaceWinners(champion.year)}>
                     <td>{champion.year}</td>
                     <td>{champion.firstName}</td>
                     <td>{champion.lastName}</td>
@@ -64,7 +65,7 @@ class List extends Component {
                     </thead>
                     <tbody>
                         {
-                        jsx 
+                            jsx 
                         }                   
                     </tbody>
                 </table> 

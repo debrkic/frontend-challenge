@@ -4,9 +4,18 @@ import './RaceWinners.scss';
 
 class RaceWinners extends Component {
     state = {
-        year: 2005,
+        year: 0,
         raceWinners: [],
         loading: false
+    }
+
+    findMinTime = (array) => {
+        let min = array[0].timeMillis;
+        array.forEach((item) => {
+            min = item.timeMillis < min ? item.timeMillis : min;
+        });
+
+        return min;
     }
 
     componentDidMount() {
@@ -14,52 +23,55 @@ class RaceWinners extends Component {
 
         this.setState((state,props) => ({
             ...state,
+            year: props.match.params.year,
             loading: true
         }),
         () => {
-            axios.get(`http://ergast.com/api/f1/2005/results/1.json`)
+            axios.get(`http://ergast.com/api/f1/${this.state.year}/results/1.json`)
             .then(response => {
                 response.data.MRData.RaceTable.Races.forEach(race => {
-                    //console.log(race);
                     raceWinners.push({
                         raceName: race.raceName,
                         round: race.round,
                         firstName: race.Results[0].Driver.givenName,
                         lastName: race.Results[0].Driver.familyName,
                         time: race.Results[0].Time.time,
+                        timeMillis: parseInt(race.Results[0].Time.millis, 10),
+                        best: false
                     });
                 });
+
+                // Find the best driver
+                const minTime = this.findMinTime(raceWinners);
+                const winner = raceWinners.find(winner => winner.timeMillis === minTime);
+                winner.best = true;
 
                 this.setState((state,props) => ({
                     ...state,
                     raceWinners,
                     loading: false
-                }),
-                () => {
-                    console.log(this.state);
-                });
+                }));
             });
         });
-
-        
     }
 
     render() {
         let jsx = this.state.loading ? 
             (<tr><td colSpan={5}>Loading. Please wait...</td></tr>) : 
             this.state.raceWinners.map((winner, index) => (
-                <tr key={index} className="table-row">
+                <tr key={index} className={winner.best ? 'table-highlighted' : ''}>
                     <td>{winner.raceName}</td>
                     <td>{winner.round}</td>
                     <td>{winner.firstName}</td>
                     <td>{winner.lastName}</td>
                     <td>{winner.time}</td>
+                    <td>{winner.timeMillis}</td>
                 </tr>
             ));
         
         return (
             <div className="race-winners">
-                <h1>Race Winners - ${this.state.year}</h1>
+                <h1>Race Winners - {this.state.year}</h1>
                 <table className="table">
                     <thead>
                         <tr>
@@ -68,6 +80,7 @@ class RaceWinners extends Component {
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Time</th>
+                            <th>Milli-Seconds</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -75,7 +88,7 @@ class RaceWinners extends Component {
                             jsx
                         }                   
                     </tbody>
-                </table> 
+                </table>
             </div>
         )
     }
