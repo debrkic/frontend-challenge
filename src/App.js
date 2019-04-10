@@ -9,7 +9,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Route path="/" exact component={List} />
-        <Route path="/race-winners/:year" exact component={RaceWinners} />
+        <Route path="/race-winners/:year/:firstname/:lastname" exact component={RaceWinners} />
       </BrowserRouter>
     );
   }

@@ -37,15 +37,15 @@ class List extends Component {
         });
     }
 
-    goToRaceWinners = (year) => {
-        window.location.assign(`/race-winners/${year}`); 
+    goToRaceWinners = (year, firstName, lastName) => {
+        window.location.assign(`/race-winners/${year}/${firstName}/${lastName}`); 
     }
 
     render() {
         let jsx = this.state.loading ? 
             (<tr><td colSpan={3}>Loading. Please wait...</td></tr>) : 
             this.state.champions.map((champion, index) => (
-                <tr key={index} className="table-row" onClick={() => this.goToRaceWinners(champion.year)}>
+                <tr key={index} className="table-row" onClick={() => this.goToRaceWinners(champion.year, champion.firstName, champion.lastName)}>
                     <td>{champion.year}</td>
                     <td>{champion.firstName}</td>
                     <td>{champion.lastName}</td>

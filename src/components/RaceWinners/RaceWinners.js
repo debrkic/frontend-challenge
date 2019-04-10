@@ -6,7 +6,8 @@ class RaceWinners extends Component {
     state = {
         year: 0,
         raceWinners: [],
-        loading: false
+        loading: false,
+        champion: {}
     }
 
     findMinTime = (array) => {
@@ -24,6 +25,7 @@ class RaceWinners extends Component {
         this.setState((state,props) => ({
             ...state,
             year: props.match.params.year,
+            champion: { firstName: props.match.params.firstname, lastName: props.match.params.lastname },
             loading: true
         }),
         () => {
@@ -37,14 +39,9 @@ class RaceWinners extends Component {
                         lastName: race.Results[0].Driver.familyName,
                         time: race.Results[0].Time.time,
                         timeMillis: parseInt(race.Results[0].Time.millis, 10),
-                        best: false
+                        best: (this.state.champion.firstName === race.Results[0].Driver.givenName) && (this.state.champion.lastName === race.Results[0].Driver.familyName)
                     });
                 });
-
-                // Find the best driver
-                const minTime = this.findMinTime(raceWinners);
-                const winner = raceWinners.find(winner => winner.timeMillis === minTime);
-                winner.best = true;
 
                 this.setState((state,props) => ({
                     ...state,
