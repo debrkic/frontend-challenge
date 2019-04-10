@@ -54,7 +54,7 @@ class RaceWinners extends Component {
 
     render() {
         let jsx = this.state.loading ? 
-            (<tr><td colSpan={5}>Loading. Please wait...</td></tr>) : 
+            (<tr><td colSpan={6}>Loading. Please wait...</td></tr>) : 
             this.state.raceWinners.map((winner, index) => (
                 <tr key={index} className={winner.best ? 'table-highlighted' : ''}>
                     <td>{winner.raceName}</td>
