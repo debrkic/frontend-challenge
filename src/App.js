@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import List from './components/List/List';
+import RaceWinners from './components/RaceWinners/RaceWinners';
 import {BrowserRouter, Route} from 'react-router-dom';
 
 class App extends Component { 
@@ -8,6 +9,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Route path="/" exact component={List} />
+        <Route path="/race-winners" exact component={RaceWinners} />
       </BrowserRouter>
     );
   }
